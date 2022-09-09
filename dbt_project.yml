@@ -36,3 +36,12 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
+
+quoting:
+  database: false
+  schema: false
+  identifier: false
+
+seeds:
+    # to allow for lowercase
+    +quote_columns: true
