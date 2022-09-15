@@ -45,3 +45,6 @@ quoting:
 seeds:
     # to allow for lowercase
     +quote_columns: true
+
+vars:
+  test_size: .33
