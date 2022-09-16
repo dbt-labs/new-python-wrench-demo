@@ -1,0 +1,3 @@
+dbt-snowflake==1.3.0b2
+# extra features
+sqlfluff~=1.2.1
