@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: stg_fruit_user_input
+    description: prepare to fuzzymatch
+    columns:
+      - name: fruit_user_input
+        quote: true
+        description: what the user manually typed in the app
+        tests:
+          - not_null
+      - name: quantity
+        quote: true
+        description: how many user wants to buy
+        tests:
+          - not_null
+      - name: user_name
+        quote: true
+        description: the internal ID of the app user
+        tests:
+          - not_null
+      - name: fruit_name
+        quote: true
+        description: best possible fuzzy match b/w user input and fact table
+        tests:
+          - not_null:
+              config:
+                  severity: warn
+                  error_if: ">5"
+                  warn_if: ">2"
+  - name: fruit_summary
+    description: total each customer definitely owes minus mismatches
+    columns:
+      - name: user_name
+        quote: true
+        description: what the user manually typed in the app
+        tests:
+          - not_null
+      - name: total_final
+        quote: true
+        description: total amount each user owes
+        tests:
+          - not_null

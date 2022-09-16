@@ -34,13 +34,10 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   python_wrench:
     # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
-
-quoting:
-  database: false
-  schema: false
-  identifier: false
+    stage:
+      stg_fruit_user_input:
+        +materialized: table
+      
 
 seeds:
     # to allow for lowercase

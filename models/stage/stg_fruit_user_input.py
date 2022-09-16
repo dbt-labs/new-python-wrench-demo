@@ -7,9 +7,7 @@ def model(dbt, session):
         packages=["fuzzywuzzy"]
     )
 
-    df_input = dbt.ref("fruit_user_input").to_pandas()
-
-    df_price = dbt.ref("fruit_prices_fact").to_pandas()
+    df_price = dbt.ref("stg_fruit_prices_fact").to_pandas()
 
     def custom_scorer(string):
         '''
@@ -24,17 +22,7 @@ def model(dbt, session):
         else:
             return None
 
-    df_final = (df_input
+    return  (dbt.ref("fruit_user_input").to_pandas()
                 # make new col, `fruit_name`, with best match against actual table
                 .assign(fruit_name=lambda df: df["fruit_user_input"].apply(custom_scorer))
-                # join the actual fruit price table
-                .merge(df_price, on="fruit_name")
-                # calculate subtotal
-                .assign(total=lambda df: df.quantity * df.cost)
-                # find total for each user
-                .groupby("user_name")["total"].sum()
-                .reset_index()
-                .sort_values("total", ascending=False)
                 )
-
-    return df_final
