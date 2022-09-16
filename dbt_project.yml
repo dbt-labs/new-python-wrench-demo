@@ -37,6 +37,9 @@ models:
     stage:
       stg_fruit_user_input:
         +materialized: table
+    v1:
+      fruit_join:
+        +enabled: false
       
 
 seeds:
