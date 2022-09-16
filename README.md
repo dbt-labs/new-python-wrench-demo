@@ -4,15 +4,21 @@ It's without question that us dbters [stan](https://www.urbandictionary.com/defi
 
 This dbt project shows a trivial example fuzzy string matching in Snowflake using dbt-snowflake Python models in Snowpark. [thefuzz](https://github.com/seatgeek/thefuzz) is the defacto package. While Snowflake SQL has the `EDITDISTANCE()` ([docs](https://docs.snowflake.com/en/sql-reference/functions/editdistance.html)) function, what we're after is "give me the best match for this string, as long as it's 'close enough'"
 
-This is easily accomplished with `process.extractOne()` ([source](https://github.com/seatgeek/thefuzz/blob/791c0bd18c77b4d9911f234c70808dbf24f74152/thefuzz/process.py#L200-L225))
+This is easily accomplished with `thefuzz.process.extractOne()` ([source](https://github.com/seatgeek/thefuzz/blob/791c0bd18c77b4d9911f234c70808dbf24f74152/thefuzz/process.py#L200-L225))
 
 
 ## Imaginiary Scenario
 
+### Video Walkthough
+
+If you'd prefer to here a rambling overview. Check out the [video walkthrough]()
+
 ### Shut up and show me the code!
 
 - [fuzzer.ipynb](fuzzer.ipynb): A notebook that shows you the code on your local machine 
-- [/models/fruit_join.py](/models/fruit_join.py): A notebook that shows you the code on your local machine 
+- [/models/v1/fruit_join.py](/models/v1/fruit_join.py): A Python model that does effectively the majority of the transformation
+- [models/stage/stg_fruit_user_input.py](models/stage/stg_fruit_user_input.py) a Python
+
 
 ### Background
 
@@ -111,3 +117,12 @@ df_final = (df_input
         return df_final
     ```
 3. to run this DAG, simply call `dbt build`!
+
+
+#### Making the code more dbtonic
+
+All we're really doing is adding a new column to a raw dataset. This falls which is also know as a staging model. So for v2, [models/stage/stg_fruit_user_input.py](models/stage/stg_fruit_user_input.py), the new column calculation is the only thing that's done to the staging model and it is done in Python. Everything else happens in SQL in downstream models as per usual.
+
+
+From [dbt's best practices](https://docs.getdbt.com/guides/legacy/best-practices)
+> Source-centric transformations to transform data from different sources into a consistent structure, for example, re-aliasing and recasting columns, or unioning, joining or deduplicating source data to ensure your model has the correct grain.
