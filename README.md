@@ -7,11 +7,13 @@ This dbt project shows a trivial example fuzzy string matching in Snowflake usin
 This is easily accomplished with `thefuzz.process.extractOne()` ([source](https://github.com/seatgeek/thefuzz/blob/791c0bd18c77b4d9911f234c70808dbf24f74152/thefuzz/process.py#L200-L225))
 
 
+## Video Walkthroughs
+
+You can watch these recorded walkthroughs below in lieu of finishing this `README.md`:
+- [Python wrench  I: Intro & Background](https://www.loom.com/share/c1ccc4b6c84740afbe65e2bf81616779)
+- [Python wrench  II: Reusable Demo](https://www.loom.com/share/a5ec42aded57469c88d01b589c3d0700)
+
 ## Imaginiary Scenario
-
-### Video Walkthough
-
-If you'd prefer to here a rambling overview. Check out the [video walkthrough]()
 
 ### Shut up and show me the code!
 
