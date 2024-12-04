@@ -1,8 +1,20 @@
+# ***Archival Notice***
+This repository has been archived.
+
+As a result all of its historical issues and PRs have been closed.
+
+Please *do not clone* this repo without understanding the risk in doing so:
+- It may have unaddressed security vulnerabilities
+- It may have unaddressed bugs
+
+<details>
+   <summary>Click for historical readme</summary>
+
 # the trusty Python wrench
 
 It's without question that us dbters [stan](https://www.urbandictionary.com/define.php?term=Stan) for SQL. However, we're not zealots -- sometimes Python is exactly the way to get things done.
 
-This dbt project shows a trivial example fuzzy string matching in Snowflake using dbt-snowflake Python models in Snowpark. [thefuzz](https://github.com/seatgeek/thefuzz) is the defacto package. While Snowflake SQL has the `EDITDISTANCE()` ([docs](https://docs.snowflake.com/en/sql-reference/functions/editdistance.html)) function, what we're after is "give me the best match for this string, as long as it's 'close enough'"
+This dbt project shows a trivial example fuzzy string matching in Snowflake using dbt-snowflake Python models in Snowpark. [thefuzz](https://github.com/seatgeek/thefuzz) is the defacto package. While Snowflake SQL has the `EDITDISTANCE()` ([docs](https://docs.snowflake.com/en/sql-reference/functions/editdistance.html)) function, what we're after is &quot;give me the best match for this string, as long as it's 'close enough'&quot;
 
 This is easily accomplished with `thefuzz.process.extractOne()` ([source](https://github.com/seatgeek/thefuzz/blob/791c0bd18c77b4d9911f234c70808dbf24f74152/thefuzz/process.py#L200-L225))
 
@@ -10,7 +22,7 @@ This is easily accomplished with `thefuzz.process.extractOne()` ([source](https:
 ## Video Walkthroughs
 
 You can watch these recorded walkthroughs below in lieu of finishing this `README.md`:
-- [Python wrench  I: Intro & Background](https://www.loom.com/share/c1ccc4b6c84740afbe65e2bf81616779)
+- [Python wrench  I: Intro &amp; Background](https://www.loom.com/share/c1ccc4b6c84740afbe65e2bf81616779)
 - [Python wrench  II: Reusable Demo](https://www.loom.com/share/a5ec42aded57469c88d01b589c3d0700)
 
 ## Imaginiary Scenario
@@ -42,7 +54,7 @@ The resulting Python model is a table that gives the total amount due for each u
 5. Returns the total price per user
 
 
-If we wanted to minimize the amount of Python and increase the testing surface area, perhaps we'd want to only use Python to do steps 1 & 2, then use a downstream SQL model to do steps 3-5. One benefit would be that we could then set a warning and error threshold if a designated perfentage of user-entered strings do not have a suitable match in the price table.
+If we wanted to minimize the amount of Python and increase the testing surface area, perhaps we'd want to only use Python to do steps 1 &amp; 2, then use a downstream SQL model to do steps 3-5. One benefit would be that we could then set a warning and error threshold if a designated perfentage of user-entered strings do not have a suitable match in the price table.
 
 ### Implementation Details
 
@@ -60,7 +72,7 @@ def custom_scorer(string, score_cutoff=60):
     if no match above `score_cutoff`, return `None`
     '''
     
-    x = process.extractOne(string,df_price["FRUIT_NAME"], score_cutoff=score_cutoff)
+    x = process.extractOne(string,df_price[&quot;FRUIT_NAME&quot;], score_cutoff=score_cutoff)
     
     if x is not None:
         return x[0]
@@ -78,13 +90,13 @@ df_final = (df_input
            # make new col, `fruit_name`, with best match against actual table
            .assign(fruit_name = lambda df: df['fruit_user_input'].apply(custom_scorer))
            # join the actual fruit price table
-           .merge(df_price, on="fruit_name")
+           .merge(df_price, on=&quot;fruit_name&quot;)
            # # calculate subtotal
            .assign(total= lambda df: df.quantity * df.cost)
            # # find total for each user and sort descending by total price
-           .groupby("user_name")['total'].sum()
+           .groupby(&quot;user_name&quot;)['total'].sum()
            .reset_index()
-           .sort_values("total", ascending=False)
+           .sort_values(&quot;total&quot;, ascending=False)
           )
 ```
 
@@ -104,13 +116,13 @@ df_final = (df_input
 
     def model(dbt, session):
         dbt.config(
-            materialized="table",
-            packages = ["fuzzywuzzy"]
+            materialized=&quot;table&quot;,
+            packages = [&quot;fuzzywuzzy&quot;]
             )
 
-        df_input = dbt.ref("user_input").to_pandas()
+        df_input = dbt.ref(&quot;user_input&quot;).to_pandas()
 
-        df_price = dbt.ref("fruit_fact").to_pandas()
+        df_price = dbt.ref(&quot;fruit_fact&quot;).to_pandas()
 
         # ... see the above two chunks ...
         def custom_scorer() ...
@@ -128,3 +140,4 @@ All we're really doing is adding a new column to a raw dataset. This falls which
 
 From [dbt's best practices](https://docs.getdbt.com/guides/legacy/best-practices)
 > Source-centric transformations to transform data from different sources into a consistent structure, for example, re-aliasing and recasting columns, or unioning, joining or deduplicating source data to ensure your model has the correct grain.
+
